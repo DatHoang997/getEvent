@@ -118,6 +118,7 @@ http.createServer(function (req, res) {
         }
       }
     })
+  }
 
   res.end('loloaaccdsd'); //end the response
 }).listen(8800); //the server object listens on port 8080
