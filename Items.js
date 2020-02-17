@@ -169,4 +169,4 @@ const Items = [
 
 ];
 
-export default Items;
+module.exports = Items;

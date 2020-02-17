@@ -1,5 +1,8 @@
 var http = require('http');
-var  Web3 = require ('web3');
+var  Web3 = require('web3');
+var Events = require('./Events');
+var Items = require('./Items');
+
 
 //create a server object:
 http.createServer(function (req, res) {
@@ -26,5 +29,5 @@ http.createServer(function (req, res) {
           console.log('Successfully unsubscribed!');
       }
   });
-  res.end('loloaaccdd'); //end the response
-}).listen(8880); //the server object listens on port 8080
+  res.end('loloaaccdsd'); //end the response
+}).listen(8800); //the server object listens on port 8080
