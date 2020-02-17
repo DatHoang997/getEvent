@@ -1,30 +1,12 @@
-var http = require('http');
-var  Web3 = require ('web3');
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/mydb";
 
-//create a server object:
-http.createServer(function (req, res) {
-  res.write('Hello World!'); //write a response to the client
-  console.log("ahacccdd")
-  const web3 = new Web3(new Web3.providers.WebsocketProvider("wss://ws.nexty.io"))
-  var subscription = web3.eth.subscribe('newBlockHeaders', function(error, result){
-    if (!error) {
-        console.log(result);
-
-        return;
-    }
-
-    console.error(error);
-  })
-  .on("data", function(blockHeader){
-      console.log(blockHeader);
-  })
-  .on("error", console.error);
-
-  // unsubscribes the subscription
-  subscription.unsubscribe(function(error, success){
-      if (success) {
-          console.log('Successfully unsubscribed!');
-      }
+MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("mydb");
+  dbo.collection("customers").find({}, { projection: { name: 0 } }).toArray(function(err, result) {
+    if (err) throw err;
+    console.log(result);
+    db.close();
   });
-  res.end('loloaaccdd'); //end the response
-}).listen(8880); //the server object listens on port 8080
+});
