@@ -11,7 +11,7 @@ MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
 
   const web3 = new Web3(new Web3.providers.WebsocketProvider("wss://ws.nexty.io"))
 
-  for (var i = 28588000; i <= 28588311; i++) {
+  for (var i = 28587378; i <= 28587378; i++) {
     web3.eth.getBlock(i, true, function(error, result){
       if (!error) {
         // console.log(result)
@@ -36,36 +36,61 @@ MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
                                 receipt.logs[n].data,
                                 receipt.logs[n].topics)
                               if(event.inputs.length === 0) {
-                                let myevents = 'event ' + event.event + ' ' + receipt.blockNumber
-                                console.log(myevents)
+                                let myevents = 'event ' + event.event + " " + receipt.blockNumber
+                                let myevent = {event: myevents};
+                                console.log(myevent)
+                                dbo.collection("events").insertOne(myevent, function(err, res) {
+                                  if (err) throw err;
+                                  console.log("1 document inserted");
+                                });
                               }
                               if(event.inputs.length === 1) {
-                                let myevents = 'event ' + w + event.inputs['0'].name + ': ' + eventparam['0'] + ')' + ' ' + receipt.blockNumber
-                                console.log(myevents)
+                                let myevents = 'event ' + w + event.inputs['0'].name + ': ' + eventparam['0'] + ')' + " " + receipt.blockNumber
+                                let myevent = {event: myevents};
+                                console.log(myevent)
+                                dbo.collection("events").insertOne(myevent, function(err, res) {
+                                  if (err) throw err;
+                                  console.log("1 document inserted");
+                                });
                               }
                               if(event.inputs.length === 2) {
                                 let myevents = 'event ' + w + event.inputs['0'].name + ': ' + eventparam['0'] + ', ' + event.inputs['1'].name + ': ' + eventparam['1'] + ')' + " " + receipt.blockNumber
-                                console.log(myevents)
-                                
+                                let myevent = {event: myevents};
+                                console.log(myevent)
+                                dbo.collection("events").insertOne(myevent, function(err, res) {
+                                  if (err) throw err;
+                                  console.log("1 document inserted");
+                                });
                               }
                               if(event.inputs.length === 3) {
                                 let myevents = 'event ' + w + event.inputs['0'].name + ': ' + eventparam['0'] + ', ' + event.inputs['1'].name + ': ' + eventparam['1'] + ', ' + event.inputs['2'].name + ': ' + eventparam['2'] + ')' + " " + receipt.blockNumber
                                 let myevent = {event: myevents};
-                                console.log(myevents)
+                                console.log(myevent)
                                 dbo.collection("events").insertOne(myevent, function(err, res) {
                                   if (err) throw err;
                                   console.log("1 document inserted");
-                                  db.close();
                                 });
                               }
                               if(event.inputs.length === 4) {
                                 let myevents = 'event ' + w + event.inputs['0'].name + ': ' + eventparam['0'] + ', ' + event.inputs['1'].name + ': ' + eventparam['1'] + ', ' + event.inputs['2'].name + ': ' + eventparam['2'] + ', ' + event.inputs['3'].name + ': ' + eventparam['3'] + ')' + " " + receipt.blockNumber
-                                console.log(myevents)
+                                let myevent = {event: myevents};
+                                console.log(myevent)
+                                dbo.collection("events").insertOne(myevent, function(err, res) {
+                                  if (err) throw err;
+                                  console.log("1 document inserted");
+                                });
                               }
                               if(event.inputs.length === 5) {
                                 let myevents = 'event ' + w + event.inputs['0'].name + ': ' + eventparam['0'] + ', ' + event.inputs['1'].name + ': ' + eventparam['1'] + ', ' + event.inputs['2'].name + ': ' + eventparam['2'] + ', ' + event.inputs['3'].name + ': ' + eventparam['3'] + ', ' + event.inputs['4'].name + ': ' + eventparam['4'] + ')' + " " + receipt.blockNumber
-                                console.log(myevents)
+                                let myevent = {event: myevents};
+                                console.log(myevent)
+                                dbo.collection("events").insertOne(myevent, function(err, res) {
+                                  if (err) throw err;
+                                  console.log("1 document inserted");
+                                });
                               }
+                              
+                              
                               var strip_comments = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg
                               var argument_names = /([^\s,]+)/g
                               var fnStr = item.function.replace(strip_comments, '')
