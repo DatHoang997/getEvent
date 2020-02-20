@@ -47,7 +47,6 @@ MongoClient.connect(url, {
 
                               flog = flog + ')'
                               flog = flog.replace(', )', ')')
-                              console.log(flog, e.blockNumber)
                               let myfunc = {
                                 function: flog,
                                 blockNumber: receipt.blockNumber,
@@ -58,10 +57,10 @@ MongoClient.connect(url, {
                               let query = {
                                 log_id: receipt.logs[n].id
                               };
-                              dbo.collection("events").find(query).toArray(function (err, result) {
+                              dbo.collection("funcs").find(query).toArray(function (err, result) {
                                 if (err) throw err;
                                 if (result == '')
-                                  dbo.collection("events").insertOne(myfunc, function (err, res) {
+                                  dbo.collection("funcs").insertOne(myfunc, function (err, res) {
                                     if (err) throw err;
                                     console.log("1 document inserted");
                                   });

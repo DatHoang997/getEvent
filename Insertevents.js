@@ -5,12 +5,13 @@ var Items = require('./Items');
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/mydb";
 
-MongoClient.connect(url, {useUnifiedTopology: true}, function (err, db) {
+MongoClient.connect(url, {
+  useUnifiedTopology: true
+}, function (err, db) {
   if (err) throw err;
   var dbo = db.db("mydb");
 
   const web3 = new Web3(new Web3.providers.WebsocketProvider("wss://ws.nexty.io"))
-  let i = 0
   for (i = 28588311; i <= 28588311; i++) {
     web3.eth.getBlock(i, true, function (error, result) {
       if (!error) {
@@ -54,17 +55,17 @@ MongoClient.connect(url, {useUnifiedTopology: true}, function (err, db) {
                               let query = {
                                 log_id: receipt.logs[n].id
                               };
-                              dbo.collection("events").find(query).toArray(function(err, result) {
+                              dbo.collection("events").find(query).toArray(function (err, result) {
                                 if (err) throw err;
-                                if(result == '')
+                                if (result == '')
                                   dbo.collection("events").insertOne(myevent, function (err, res) {
                                     if (err) throw err;
                                     console.log("1 document inserted");
-                                });
+                                  });
                               });
                             }
                           }
-                          
+
                         }
                       }
                     })
@@ -77,6 +78,6 @@ MongoClient.connect(url, {useUnifiedTopology: true}, function (err, db) {
         }
       }
     })
-  }  
+  }
 
 })
