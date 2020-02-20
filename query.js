@@ -11,21 +11,18 @@ MongoClient.connect(url, {
 }, function (err, db) {
   if (err) throw err;
   var dbo = db.db("mydb");
-  for (var i = 28583000; i <= 28588311; i++) {
+  for (let i = 28588300; i <= 28588311; i++) {
     var query = {
       blockNumber: i
     };
-    dbo.collection("events").find(query).toArray(function (err, result) {
+    dbo.collection("events").find(query).toArray(function (err, results) {
       if (err) throw err;
-      if (result != '') {
-        console.log(result);
+      if (results != '') {
+        console.log(results);
       } else {
           const web3 = new Web3(new Web3.providers.WebsocketProvider("wss://ws.nexty.io"))
-          let i = 0
-          for (i = 28588311 - 5000; i <= 28588311; i++) {
             web3.eth.getBlock(i, true, function (error, result) {
               if (!error) {
-                // console.log(result)
                 if (result != null && result.transactions != null) {
                   Items.forEach((item) => {
                     result.transactions.forEach(function (e) {
@@ -79,13 +76,13 @@ MongoClient.connect(url, {
                           }
                         })
                       }
-                      // }
-                    })
+                      }
+                    )
                   })
                 }
               }
             })
-          }
+          
 
  
       }
