@@ -42,14 +42,12 @@ MongoClient.connect(url, {
                                 receipt.logs[n].data,
                                 receipt.logs[n].topics)
                               let elog = ename
-
                               for (let i = 0; i < event.inputs.length + 1; i++) {
                                 if (i > 0) {
                                   let temp = elog + event.inputs[i - 1].name + ": " + eventparam[i - 1] + ", ";
                                   elog = temp
                                 }
                                 if (i === event.inputs.length) {
-
                                   elog = elog + ')'
                                   elog = elog.replace(', )', ')')
                                   let myevent = {
