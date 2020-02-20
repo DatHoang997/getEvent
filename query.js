@@ -42,12 +42,14 @@ MongoClient.connect(url, {
                                 receipt.logs[n].data,
                                 receipt.logs[n].topics)
                               let elog = ename
+
                               for (let i = 0; i < event.inputs.length + 1; i++) {
                                 if (i > 0) {
                                   let temp = elog + event.inputs[i - 1].name + ": " + eventparam[i - 1] + ", ";
                                   elog = temp
                                 }
                                 if (i === event.inputs.length) {
+
                                   elog = elog + ')'
                                   elog = elog.replace(', )', ')')
                                   let myevent = {
@@ -58,12 +60,18 @@ MongoClient.connect(url, {
                                   let query = {
                                     log_id: receipt.logs[n].id
                                   };
-                                  dbo.collection("funcs").find(query).toArray(function (err, result) {
+                                  dbo.collection("events").find(query).toArray(function (err, result) {
                                     if (err) throw err;
                                     if (result == '')
                                       dbo.collection("events").insertOne(myevent, function (err, res) {
                                         if (err) throw err;
                                         console.log("1 document inserted");
+                                        dbo.collection("events").find(query).toArray(function (err, results) {
+                                          if (err) throw err;
+                                          if (results != '') {
+                                            console.log(results);
+                                          }
+                                        });
                                       });
                                   });
                                 }
@@ -132,6 +140,12 @@ MongoClient.connect(url, {
                                       dbo.collection("funcs").insertOne(myfunc, function (err, res) {
                                         if (err) throw err;
                                         console.log("1 document inserted");
+                                        dbo.collection("funcs").find(query).toArray(function (err, results) {
+                                          if (err) throw err;
+                                          if (results != '') {
+                                            console.log(results);
+                                          }
+                                        });
                                       });
                                   });
                                 }
