@@ -5,7 +5,7 @@ MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
   if (err) throw err;
   console.log("Database created!");
   var dbo = db.db("mydb");
-  dbo.createCollection("funcs", function(err, res) {
+  dbo.createCollection("save", function(err, res) {
     if (err) throw err;
     console.log("Collection created!");
   db.close();
