@@ -10,23 +10,14 @@ const web3 = new Web3(new Web3.providers.WebsocketProvider("wss://ws.nexty.io"))
 
 query = async (insertNumber) => {
 
-  MongoClient.connect(url, {
-    useUnifiedTopology: true
-  }, function (err, db) {
+  MongoClient.connect(url, {useUnifiedTopology: true}, function (err, db) {
     if (err) throw err;
     var dbo = db.db("mydb");
     for (let i = insertNumber - 10; i <= insertNumber; i++) {
-      // console.log(i)
-      dbo.collection("blockNumber").find({
-        blockNumber: i
-      }).toArray(function (err, result) {
+      dbo.collection("save").find({blockNumber: i}).toArray(function (err, result) {
         if (result == '') {
-          dbo.collection("blockNumber").insertOne({
-            blockNumber: i
-          }, function (err, res) {
+          dbo.collection("save").insertOne({blockNumber: i}, function (err, res) {
             if (err) throw err;
-            console.log("1 document inserted");
-
             web3.eth.getBlock(i, true, function (error, result) {
               if (!error) {
                 if (result != null && result.transactions != null) {
@@ -75,6 +66,7 @@ query = async (insertNumber) => {
                                               flog = flog + ')'
                                               flog = flog.replace(', )', ')')
                                               let myfunc = {
+                                                status: true,
                                                 event: elog,
                                                 function: flog,
                                                 blockNumber: receipt.blockNumber,
@@ -118,7 +110,8 @@ query = async (insertNumber) => {
           })
         } else {
           dbo.collection("save").find({
-            blockNumber: i
+            blockNumber: i,
+            status: true
           }).toArray(function (err, results) {
             if (err) throw err;
             if (results != '') {
