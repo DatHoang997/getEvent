@@ -1,22 +1,31 @@
 var http = require('http');
 var Web3 = require('web3');
-var Events = require('./Events');
-var Items = require('./Items');
-var Accs = require('./Accs');
+var Events = require('./Mockup/Events');
+var Items = require('./Mockup/Items');
+var Accs = require('./Mockup/Accs');
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/mydb";
 
 const web3 = new Web3(new Web3.providers.WebsocketProvider("wss://ws.nexty.io"))
 
 query = async (insertNumber) => {
-
+  MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
+    if (err) throw err;
+    console.log("Database created!");
+    var dbo = db.db("mydb");
+    dbo.createCollection("data", function(err, res) {
+      if (err) throw err;
+      console.log("Collection created!");
+    db.close();
+    });
+  });
   MongoClient.connect(url, {useUnifiedTopology: true}, function (err, db) {
     if (err) throw err;
     var dbo = db.db("mydb");
     for (let i = insertNumber - 10; i <= insertNumber; i++) {
-      dbo.collection("save").find({blockNumber: i}).toArray(function (err, result) {
+      dbo.collection("data").find({blockNumber: i}).toArray(function (err, result) {
         if (result == '') {
-          dbo.collection("save").insertOne({blockNumber: i}, function (err, res) {
+          dbo.collection("data").insertOne({blockNumber: i}, function (err, res) {
             if (err) throw err;
             web3.eth.getBlock(i, true, function (error, result) {
               if (!error) {
@@ -56,6 +65,7 @@ query = async (insertNumber) => {
                                       let fname = item.function.slice(0, fcut + 1)
                                       let decode = web3.eth.abi.decodeParameters(parameters, para)
                                       Accs.forEach((acc) => {
+                                        console.log(acc)
                                         if (acc.address === e.from || acc.address === e.to) {
                                           let flog = acc.name + ' ' + fname
                                           for (let i = 0; i < parameters.length; i++) {
@@ -75,13 +85,13 @@ query = async (insertNumber) => {
                                               let query = {
                                                 log_id: receipt.logs[n].id
                                               };
-                                              dbo.collection("save").find(query).toArray(function (err, result) {
+                                              dbo.collection("data").find(query).toArray(function (err, result) {
                                                 if (err) throw err;
                                                 // if (result == '')
-                                                dbo.collection("save").insertOne(myfunc, function (err, res) {
+                                                dbo.collection("data").insertOne(myfunc, function (err, res) {
                                                   if (err) throw err;
                                                   console.log("1 document inserted");
-                                                  dbo.collection("save").find(query).toArray(function (err, results) {
+                                                  dbo.collection("data").find(query).toArray(function (err, results) {
                                                     if (err) throw err;
                                                     if (results != '') {
                                                       console.log(results);
@@ -101,7 +111,6 @@ query = async (insertNumber) => {
                           }
                         })
                       }
-                      // }
                     })
                   })
                 }
@@ -109,7 +118,7 @@ query = async (insertNumber) => {
             })
           })
         } else {
-          dbo.collection("save").find({
+          dbo.collection("data").find({
             blockNumber: i,
             status: true
           }).toArray(function (err, results) {
@@ -121,7 +130,10 @@ query = async (insertNumber) => {
 
         }
       })
+      
     }
   })
+  
+
 }
 query(28588311)
